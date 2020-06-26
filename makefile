@@ -5,8 +5,8 @@ export
 
 app: 
 	@docker-compose up --build -d
-	@yarn --cwd ./src/client/
-	@yarn --cwd ./src/client/ build
+	@yarn --cwd ./src/now-ui-dashboard-react/
+	@yarn --cwd ./src/now-ui-dashboard-react/ build
 	@curl localhost:$(PYTHON_PORT)/seed | jq
 
 seed:

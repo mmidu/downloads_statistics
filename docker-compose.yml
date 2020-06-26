@@ -1,0 +1,32 @@
+version: "3.5"
+
+services:
+  python:
+    build: docker/python/.
+    container_name: ${PYTHON_CONTAINER_NAME}
+    restart: always
+    ports:
+      - ${PYTHON_PORT}:8000
+    volumes:
+      - ./src:/app
+    networks:
+      backend:
+        aliases:
+          - ${PYTHON_CONTAINER_NAME}
+
+  redis:
+    image: redis:5.0
+    container_name: ${REDIS_CONTAINER_NAME}
+    restart: always
+    ports:
+      - ${REDIS_PORT}:6379
+    volumes:
+      - ./data/redis:/data
+    networks:
+      backend:
+        aliases:
+          - ${REDIS_CONTAINER_NAME}
+
+networks:
+  backend:
+    name: ${NETWORK_NAME}

@@ -23,23 +23,21 @@ class Map extends Component {
 			attributionControl: false
 		})
 
-		var marker = new mapboxgl.Marker()
-			.setLngLat([9.191383, 45.464211])
-			.addTo(map)
+		// var marker = new mapboxgl.Marker()
+		// 	.setLngLat([9.191383, 45.464211])
+		// 	.addTo(map)
 
-		// new mapboxgl.Marker(el, {offset: [-5 / 2, -5 / 2]})
-		// .setLngLat([this.state.lng, this.state.lat])
-		// .addTo(map);
-		// try {
-		// 	const response = await fetch("http://localhost:8081/downloads")
-		// 	const data = await response.json()
-		// 	data.map((id, coordinates) => {
-		// 		console.log(id)
-		// 		console.log(coordinates)
-		// 	})
-		// } catch(error){
-		// 	console.log(error)
-		// }
+		try {
+			const response = await fetch("http://localhost:8081/downloads")
+			const data = await response.json()
+			data.map((poi) => {
+				new mapboxgl.Marker()
+					.setLngLat(poi.coordinates)
+					.addTo(map)
+			})
+		} catch(error){
+			console.log(error)
+		}
 		
 	}
 	render(){

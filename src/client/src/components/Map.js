@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import mapboxgl from "mapbox-gl"
 import { MAPBOX_ACCESS_TOKEN } from "../conf"
+import 'mapbox-gl/dist/mapbox-gl.css'
 
 mapboxgl.accessToken = MAPBOX_ACCESS_TOKEN
 
@@ -9,19 +10,37 @@ class Map extends Component {
 		super(props)
 
 		this.state = {
-			lng: 5,
-			lat: 34,
-			zoom: 2
+			zoom: 1
 		}
 	}
-	componentDidMount() {
-		new mapboxgl.Map({
+	componentDidMount = async () => {
+
+		var map = new mapboxgl.Map({
 			container: this.mapContainer,
-			style: 'mapbox://styles/mapbox/streets-v11',
-			center: [this.state.lng, this.state.lat],
+			style: 'mapbox://styles/mapbox/light-v10',
+			center: [9.191383, 45.464211],
 			zoom: this.state.zoom,
 			attributionControl: false
-		});
+		})
+
+		var marker = new mapboxgl.Marker()
+			.setLngLat([9.191383, 45.464211])
+			.addTo(map)
+
+		// new mapboxgl.Marker(el, {offset: [-5 / 2, -5 / 2]})
+		// .setLngLat([this.state.lng, this.state.lat])
+		// .addTo(map);
+		// try {
+		// 	const response = await fetch("http://localhost:8081/downloads")
+		// 	const data = await response.json()
+		// 	data.map((id, coordinates) => {
+		// 		console.log(id)
+		// 		console.log(coordinates)
+		// 	})
+		// } catch(error){
+		// 	console.log(error)
+		// }
+		
 	}
 	render(){
 		return (

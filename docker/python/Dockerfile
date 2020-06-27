@@ -10,5 +10,6 @@ EXPOSE 8000
 
 ENTRYPOINT ["uvicorn"]
 
-CMD ["main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+#CMD ["main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
 
+CMD ["main:app", "--host", "0.0.0.0", "--port", "8000"]

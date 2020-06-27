@@ -4,9 +4,10 @@ include .env
 export
 
 app: 
+	@yarn --cwd ./src/client/
+	@yarn --cwd ./src/client/ build
 	@docker-compose up --build -d
-	@yarn --cwd ./src/now-ui-dashboard-react/
-	@yarn --cwd ./src/now-ui-dashboard-react/ build
+	@sleep 1
 	@curl localhost:$(PYTHON_PORT)/seed | jq
 
 seed:

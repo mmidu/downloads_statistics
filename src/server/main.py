@@ -30,7 +30,7 @@ def seed_redis():
 
 @app.get("/")
 def redirect():
-    return RedirectResponse(url="/now-ui-dashboard-react/index.html")
+    return RedirectResponse(url="/index.html")
 
 
-app.mount("/now-ui-dashboard-react", StaticFiles(directory="../now-ui-dashboard-react/build"), name="static")
+app.mount("/", StaticFiles(directory="../client/build"), name="client")

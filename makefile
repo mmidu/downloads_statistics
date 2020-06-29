@@ -3,12 +3,16 @@
 include .env
 export
 
+#./src/client/src/conf.js.dev:
+#	@cp ./src/client/src/conf.js.dev ./src/client/src/conf.js
+#
+#include ./src/client/src/conf.js
+
 app: 
-	@docker-compose up --build -d
 	@yarn --cwd ./src/client/
 	@yarn --cwd ./src/client/ build
-	@curl localhost:$(PYTHON_PORT)/seed | jq
-
+	@docker-compose up --build -d
+	
 seed:
 	@curl localhost:$(PYTHON_PORT)/seed | jq
 

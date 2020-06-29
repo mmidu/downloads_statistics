@@ -11,7 +11,7 @@ class DownloadSeeder():
 		self.latitude = random.uniform(-90, 90)
 		self.longitude = random.uniform(-180, 180)
 		self.app_id = random.random() > 0.5 and "IOS_ALERT" or "IOS_MATE"
-		self.downloaded_at = random.uniform(datetime.today().timestamp(), (datetime.today() + timedelta(days = 1)).timestamp())
+		self.downloaded_at = random.uniform(datetime.today().timestamp(), (datetime.today() + timedelta(days = 1)).timestamp()) * 1000
 
 		res = requests.get("https://api.mapbox.com/geocoding/v5/mapbox.places/{},{}.json?types=country&access_token={}".format(self.longitude, self.latitude, MAPBOX_ACCESS_TOKEN)).json()
 

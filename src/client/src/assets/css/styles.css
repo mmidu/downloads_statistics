@@ -3,5 +3,10 @@
 	display: inline-block;*/
 	top: 0;
 	right: 0;
-	height: 60vh;
+	height: 55vh;
+}
+
+.chart3 {
+	display: inline-block;
+	width: 33.3%;
 }

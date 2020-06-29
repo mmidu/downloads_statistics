@@ -3,12 +3,10 @@
 include .env
 export
 
-#./src/client/src/conf.js.dev:
-#	@cp ./src/client/src/conf.js.dev ./src/client/src/conf.js
-#
-#include ./src/client/src/conf.js
-
 app: 
+ifeq (,$(wildcard ./src/client/src/conf.js))
+	@cp src/client/src/conf.js.dev src/client/src/conf.js
+endif
 	@yarn --cwd ./src/client/
 	@yarn --cwd ./src/client/ build
 	@docker-compose up --build -d

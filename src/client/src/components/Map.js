@@ -23,14 +23,32 @@ class Map extends Component {
 			attributionControl: false
 		})
 
+		var countries = {
+
+		}
+		
+		this.props.setDataPoints('timeOfDay', [
+			{ label: "Morning",  y: 10  },
+			{ label: "Afternoon", y: 15  },
+			{ label: "Night", y: 25  },
+		])
+		this.props.setDataPoints('type', [
+			{ label: "Apple",  y: 10  },
+			{ label: "Orange", y: 15  },	
+		])
 		try {
 			const response = await fetch("http://localhost:8081/downloads")
 			const data = await response.json()
-			data.map( async (poi) => {
+
+			this.props.setDataPoints('country', data.countries)
+			this.props.setDataPoints('appId', data.appIds)
+			this.props.setDataPoints('timeOfDay', data.timesOfDay)
+
+			await data.downloads.map( async (poi) => {
 				new mapboxgl.Marker()
 					.setLngLat(poi.coordinates)
 					.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
-    				.setHTML('<h3>' + poi.country + '</h3>'))
+    				.setHTML('<h3>' + poi.country + '</h3><p>' + new Date(poi.downloaded_at) + '<br>' + poi.app_id + '</p>'))
 					.addTo(map)
 			})
 		} catch(error){

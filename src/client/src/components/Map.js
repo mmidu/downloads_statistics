@@ -23,16 +23,14 @@ class Map extends Component {
 			attributionControl: false
 		})
 
-		// var marker = new mapboxgl.Marker()
-		// 	.setLngLat([9.191383, 45.464211])
-		// 	.addTo(map)
-
 		try {
 			const response = await fetch("http://localhost:8081/downloads")
 			const data = await response.json()
-			data.map((poi) => {
+			data.map( async (poi) => {
 				new mapboxgl.Marker()
 					.setLngLat(poi.coordinates)
+					.setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+    				.setHTML('<h3>' + poi.country + '</h3>'))
 					.addTo(map)
 			})
 		} catch(error){

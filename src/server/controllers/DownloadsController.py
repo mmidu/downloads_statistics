@@ -7,5 +7,5 @@ class DownloadsController():
     def get(self):
 	    data = self.redis.client.smembers("downloads")
 	    json_data = [json.loads(i) for i in data]
-	    json_data = [{"id": i["id"], "coordinates": [i["longitude"], i["latitude"]]} for i in json_data]
+	    json_data = [{"id": i["id"], "coordinates": [i["longitude"], i["latitude"]], "country": i["country"]} for i in json_data]
 	    return json_data

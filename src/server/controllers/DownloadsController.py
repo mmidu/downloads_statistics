@@ -6,9 +6,7 @@ class DownloadsController():
 		self.redis = redis
 
 	def get(self):
-		data = self.redis.client.smembers("downloads")
-		downloads = [json.loads(i) for i in data]
-
+		downloads = []
 		countries = {}
 		appIds = {}
 		timesOfDay = {
@@ -18,8 +16,13 @@ class DownloadsController():
 			"night": 0
 		}
 
-		for elem in downloads:
+		for elem in self.redis.client.smembers("downloads"):
+			elem = json.loads(elem)
+
 			elem["coordinates"] = (elem["longitude"], elem["latitude"])
+
+			downloads.append(elem)
+
 			if elem["country"] in countries:
 				countries[elem["country"]] += 1
 			else: 
@@ -33,23 +36,20 @@ class DownloadsController():
 			hour = int(date.strftime("%H"))
 			timesOfDay[self.get_time_of_day(hour)] += 1 
 
-		for country in countries:
-			countries[country] = {"label": country, "y": countries[country]}
-
-		for app_id in appIds:
-			appIds[app_id] = {"label": app_id, "y": appIds[app_id]}
-
-		for tod in timesOfDay:
-			timesOfDay[tod] = {"label": tod, "y": timesOfDay[tod]}
-
-		ret = {
+		return {
 			"downloads": downloads,
-			"countries": list(countries.values()),
-			"appIds": list(appIds.values()),
-			"timesOfDay": list(timesOfDay.values())
+			"countries": self.format_data(countries),
+			"appIds": self.format_data(appIds),
+			"timesOfDay": self.format_data(timesOfDay)
 		}
 
-		return ret
+
+
+	def format_data(self, collection):
+		for elem in collection:
+			collection[elem] = {"label": elem, "y": collection[elem]}
+		return list(collection.values())
+
 
 	def get_time_of_day(self, hour):
 		return (

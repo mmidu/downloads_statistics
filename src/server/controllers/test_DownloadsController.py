@@ -5,14 +5,6 @@ import random
 redis = RedisClient('ds_redis', 6379, 0)
 dc = DownloadsController(redis)
 
-def test_format_data():
-    collection = {
-        "foo": 1,
-        "bar": 2
-    }
-    formattedCollection = dc.format_data(collection)
-    assert isinstance(formattedCollection, list)
-
 def test_get_time_of_day():
     morning = dc.get_time_of_day(random.random() * 6 + 5)
     afternoon = dc.get_time_of_day(random.random() * 5 + 12)

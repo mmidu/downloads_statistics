@@ -18,12 +18,15 @@ class DownloadSeeder():
 		self.country = res['features'] and res['features'][0]['text'] or 'NA'
 		self.id = id
 
-	def __str__(self):
-		return json.dumps({
+	def toJSON(self):
+		return {
 			"id": self.id,
 			"latitude": self.latitude,
 			"longitude": self.longitude,
 			"app_id": self.app_id,
 			"downloaded_at": self.downloaded_at,
 			"country": self.country
-		})
+		}
+
+	def __str__(self):
+		return json.dumps(self.toJSON())

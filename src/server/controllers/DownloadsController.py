@@ -38,18 +38,22 @@ class DownloadsController():
 
 		return {
 			"downloads": downloads,
-			"countries": self.format_data(countries),
-			"appIds": self.format_data(appIds),
-			"timesOfDay": self.format_data(timesOfDay)
+			"countries": countries,
+			"appIds": appIds,
+			"timesOfDay": timesOfDay
 		}
 
-
-
-	def format_data(self, collection):
-		for elem in collection:
-			collection[elem] = {"label": elem, "y": collection[elem]}
-		return list(collection.values())
-
+	def format_one(self, download):
+		download["coordinates"] = (download["longitude"], download["latitude"])
+		date = datetime.datetime.fromtimestamp(download["downloaded_at"] / 1e3)	
+		hour = int(date.strftime("%H"))
+		timeOfDay = self.get_time_of_day(hour)
+		return {
+			"download": download,
+			"country": download["country"],
+			"appId": download["app_id"],
+			"timeOfDay": timeOfDay
+		}	
 
 	def get_time_of_day(self, hour):
 		return (

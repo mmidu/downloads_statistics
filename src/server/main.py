@@ -1,14 +1,18 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import RedirectResponse
 from utils.database.RedisClient import RedisClient
 from seeds import seeds
 from controllers import DownloadsController
+from seeds.DownloadSeeder import DownloadSeeder
+import json
 import os
 
 app = FastAPI()
 
 redis = RedisClient('ds_redis', 6379, 0)
+
+
 
 @app.get("/api")
 def read_root():
@@ -30,7 +34,18 @@ def seed_redis():
 
 @app.get("/")
 def redirect():
-    return RedirectResponse(url="/index.html")
+	return RedirectResponse(url="/index.html")
 
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+	await websocket.accept()
+	while True:
+		data = await websocket.receive_text()
+		id = redis.client.scard("downloads") + 1
+		download = DownloadSeeder(id)
+		redis.client.sadd("downloads", str(download))
+		downloadsController = DownloadsController.DownloadsController(redis)
+		formatted = downloadsController.format_one(download.toJSON())
+		await websocket.send_json({"msg": formatted})
 
 app.mount("/", StaticFiles(directory="../client/build"), name="client")

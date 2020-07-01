@@ -1,9 +1,7 @@
 from DownloadsController import DownloadsController
-from utils.database.RedisClient import RedisClient
 import random
 
-redis = RedisClient('ds_redis', 6379, 0)
-dc = DownloadsController(redis)
+dc = DownloadsController()
 
 def test_get_time_of_day():
     morning = dc.get_time_of_day(random.random() * 6 + 5)

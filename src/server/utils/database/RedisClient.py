@@ -14,3 +14,5 @@ class RedisClient:
             RedisClient.instance.client = redis.Redis(host='ds_redis', port=6379, db=0)
     def __getattr__(self, name):
         return getattr(self.instance, name)
+
+Redis = RedisClient('ds_redis', 6379, 0)

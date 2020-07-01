@@ -1,7 +1,7 @@
 from fastapi import FastAPI, WebSocket
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import RedirectResponse
-from utils.database.RedisClient import RedisClient
+from utils.database.RedisClient import Redis
 from seeds import seeds
 from controllers import DownloadsController
 from seeds.DownloadSeeder import DownloadSeeder
@@ -10,10 +10,6 @@ import os
 
 app = FastAPI()
 
-redis = RedisClient('ds_redis', 6379, 0)
-
-
-
 @app.get("/api")
 def read_root():
 	return {"app": {"version": "0.01"}}
@@ -21,14 +17,14 @@ def read_root():
 
 @app.get("/downloads")
 def get_downloads():
-	downloadsController = DownloadsController.DownloadsController(redis)
+	downloadsController = DownloadsController.DownloadsController()
 	return downloadsController.get()
 
 
 @app.get("/seed")
 def seed_redis():
-	redis.client.flushdb()
-	seeder = seeds.Seeder(redis)
+	Redis.client.flushdb()
+	seeder = seeds.Seeder()
 	seeder.run()
 	return {"status": "ok"}
 
@@ -41,11 +37,8 @@ async def websocket_endpoint(websocket: WebSocket):
 	await websocket.accept()
 	while True:
 		data = await websocket.receive_text()
-		id = redis.client.scard("downloads") + 1
-		download = DownloadSeeder(id)
-		redis.client.sadd("downloads", str(download))
-		downloadsController = DownloadsController.DownloadsController(redis)
-		formatted = downloadsController.format_one(download.toJSON())
-		await websocket.send_json({"msg": formatted})
+		downloadsController = DownloadsController.DownloadsController()
+		download = downloadsController.new()
+		await websocket.send_json({"msg": download})
 
 app.mount("/", StaticFiles(directory="../client/build"), name="client")

@@ -1,9 +1,17 @@
 import json
 import datetime
+import random
+from utils.database.RedisClient import Redis
+from models.Download import Download
 
 class DownloadsController():
-	def __init__(self, redis):
-		self.redis = redis
+	def new(self):
+		latitude = random.uniform(-90, 90)
+		longitude = random.uniform(-180, 180)
+		app_id = random.random() > 0.5 and "IOS_ALERT" or "IOS_MATE"
+		download = Download(latitude, longitude, app_id)
+		Redis.client.sadd("downloads", str(download))
+		return self.format_one(download.to_json())		
 
 	def get(self):
 		downloads = []
@@ -16,7 +24,7 @@ class DownloadsController():
 			"night": 0
 		}
 
-		for elem in self.redis.client.smembers("downloads"):
+		for elem in Redis.client.smembers("downloads"):
 			elem = json.loads(elem)
 
 			elem["coordinates"] = (elem["longitude"], elem["latitude"])

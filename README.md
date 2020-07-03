@@ -3,7 +3,8 @@
 <h3>How to run:</h3>
 <ol>
   <li>cd into the root directory.</li>
-  <li>run the command <code>make app</code> to build the app. This will build the containers and execute the first database seeding.</li>
+  <li>run the command <code>make app</code> to build the app. This will build the containers.
+  <li>run the command <code>make seed</code>. This will seed the database.</li>
   <li>the application is exposed at <code>http://localhost:8081</code> by default.</li>
 </ol>
 
